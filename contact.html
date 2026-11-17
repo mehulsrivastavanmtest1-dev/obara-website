@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Obara | Contact</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- TOP MENU -->
+  <header>
+    <a href="index.html" class="logo">OBARA</a>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="collection.html">Collection</a>
+      <a href="story.html">Our Story</a>
+      <a href="contact.html" class="active">Contact</a>
+    </nav>
+  </header>
+
+  <!-- PAGE BANNER -->
+  <div class="hero small">
+    <h1>Contact</h1>
+    <p>Questions, orders or fragrance advice. We would love to hear from you.</p>
+  </div>
+
+  <!-- THE FORM
+       data-netlify="true" is all Netlify needs to collect the messages for you.
+       Each <input> or <textarea> becomes one field in the message you receive.
+       The "name" of each field is the label you will see in Netlify. -->
+  <section class="soft">
+    <form class="contact-form" name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field">
+
+      <!-- Netlify needs this hidden line to recognise the form -->
+      <input type="hidden" name="form-name" value="contact">
+
+      <!-- Hidden trap for spam robots (real people never see it) -->
+      <p class="trap"><label>Leave this empty: <input name="bot-field"></label></p>
+
+      <label for="name">Name</label>
+      <input type="text" id="name" name="name" required autocomplete="name">
+
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required autocomplete="email">
+
+      <label for="topic">How can we help?</label>
+      <select id="topic" name="topic">
+        <option>General enquiry</option>
+        <option>Placing an order</option>
+        <option>Fragrance recommendation</option>
+        <option>Something else</option>
+      </select>
+
+      <label for="message">Message</label>
+      <textarea id="message" name="message" rows="5" required></textarea>
+
+      <button type="submit" class="button">Send message</button>
+
+      <!-- These two lines appear after the form is sent -->
+      <p class="form-note" id="form-success" hidden>Thank you. Your message has been sent and we will reply soon.</p>
+      <p class="form-note" id="form-error" hidden>Sorry, something went wrong. Please try again.</p>
+    </form>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    © 2026 Obara · A fictional brand made for practice
+  </footer>
+
+  <script src="script.js"></script>
+
+  <!-- Sends the form without reloading the page, then shows the thank-you line -->
+  <script>
+    var form = document.querySelector(".contact-form");
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      var button = form.querySelector("button");
+      button.disabled = true;
+      fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams(new FormData(form)).toString()
+      }).then(function (response) {
+        if (!response.ok) { throw new Error("failed"); }
+        form.reset();
+        document.getElementById("form-error").hidden = true;
+        document.getElementById("form-success").hidden = false;
+      }).catch(function () {
+        document.getElementById("form-success").hidden = true;
+        document.getElementById("form-error").hidden = false;
+      }).finally(function () {
+        button.disabled = false;
+      });
+    });
+  </script>
+</body>
+</html>
